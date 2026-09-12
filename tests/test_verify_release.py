@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tests for release-gate helpers."""
 
+import re
+
 from scripts.verify_release import (
     _clear_release_artifacts,
     _latest_wheel,
@@ -14,7 +16,9 @@ def test_tail_keeps_only_latest_output():
 
 
 def test_project_version_is_declared():
-    assert _read_project_version() == "1.0.1"
+    # 版本号随发布递增，这里只校验其为合法 SemVer，避免每次发版都改测试
+    version = _read_project_version()
+    assert re.fullmatch(r"\d+\.\d+\.\d+(?:[.\-+][0-9A-Za-z.\-]+)?", version), version
 
 
 def test_latest_wheel_returns_most_recent_artifact(tmp_path, monkeypatch):

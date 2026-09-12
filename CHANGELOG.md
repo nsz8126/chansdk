@@ -2,6 +2,19 @@
 
 本文件记录 chansdk 的版本变更，版本号遵循语义化版本（SemVer）。
 
+## 1.0.2 - 2026-09-12
+
+文档与包元数据修正版本，无算法与 API 变更。
+
+### 变更
+
+- 重写 CHANGELOG：移除代码中不存在的 `Akshare`/`Pytdx` 数据源描述，补全 1.0.1 实际发布内容。
+- README 补充 PyPI / CI / 许可证徽章、示例文件清单、国内镜像安装提示、`scripts/` 脚本清单。
+- README 措辞修正：线段算法标注 `1+1`、`break` 已弃用；数据源描述由「内置三种」修正为「内置两种零依赖数据源 + 可选外部源」。
+- 新增 `LICENSE`（MIT），并纳入 MANIFEST.in 与打包产物。
+- `pyproject.toml` 补充 `keywords`、`classifiers` 与 `[project.urls]`，完善 PyPI 项目页信息。
+- 测试 `test_project_version_is_declared` 由硬编码版本号改为 SemVer 格式校验，避免每次发版都需改测试。
+
 ## 1.0.1 - 2026-09-12
 
 首个公开版本，已发布至 PyPI（`pip install chansdk`）与 GitHub Release。
