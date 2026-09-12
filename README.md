@@ -2,11 +2,16 @@
 
 纯 Python 实现的缠论（Chan Theory）核心算法库，零外部依赖。
 
+[![PyPI](https://img.shields.io/pypi/v/chansdk)](https://pypi.org/project/chansdk/)
+[![Python](https://img.shields.io/pypi/pyversions/chansdk)](https://pypi.org/project/chansdk/)
+[![CI](https://github.com/nsz8126/chansdk/actions/workflows/test.yml/badge.svg)](https://github.com/nsz8126/chansdk/actions/workflows/test.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 ## 功能
 
 - **K线合并**：包含关系处理、分型识别
 - **笔（Bi）**：笔的构建、验证、MACD度量
-- **线段（Seg）**：特征序列法、1+1算法、break算法
+- **线段（Seg）**：特征序列法（默认 `chan` 算法）；`1+1`、`break` 为已弃用算法
 - **中枢（ZS）**：中枢构建、合并、背驰判断
 - **买卖点（BSP）**：1/1p/2/2s/3a/3b 六类买卖点识别
 - **技术指标**：MACD、BOLL、RSI、KDJ、Demark、趋势线
@@ -25,9 +30,21 @@ pip install chansdk[eltdx]
 pip install chansdk[dev]
 ```
 
+要求 Python >= 3.11。
+
+> 国内镜像（如阿里云、清华）同步新版本存在延迟，可能提示找不到包。此时可指定官方源：
+> `pip install chansdk -i https://pypi.org/simple`
+
+## 示例
+
+| 文件 | 说明 |
+|---|---|
+| `examples/basic_usage.py` | CSV 数据源基础分析、自定义配置 |
+| `examples/query_stock_structure.py` | 按代码与级别查询笔/线段/中枢/买卖点结构（命令行参数） |
+
 ## 数据源
 
-SDK 内置三种数据源，并支持自定义数据源：
+SDK 内置两种零依赖数据源（CSV、SQLite 缓存），并提供可选的外部行情源与自定义数据源接口：
 
 | 数据源 | 说明 |
 |---|---|
@@ -123,7 +140,7 @@ eltdx 特性：
 
 > 注意：eltdx 许可证禁止商业使用。外部行情服务可能受网络、服务端限流或历史数据边界影响，生产灰度建议先限制标的数量和时间窗口，并记录 `CChanException` 的错误信息。
 
-## 灰度探测
+## 验证与发布
 
 仓库提供可重复执行的串行灰度脚本。默认只验证本地 CSV 和 SQLite 链路：
 
@@ -158,6 +175,15 @@ python scripts/verify_release.py
 ```bash
 python scripts/verify_docs.py --run-marked --json-out build/release/docs_report.json
 ```
+
+脚本清单：
+
+| 脚本 | 用途 |
+|---|---|
+| `scripts/gray_probe.py` | 数据源灰度探测，输出 JSON 报告 |
+| `scripts/verify_release.py` | 发布门禁：测试 + 编译 + 文档示例 + 灰度 + 构建 |
+| `scripts/verify_docs.py` | README 代码块编译与执行校验 |
+| `scripts/fix_mojibake.py` | 注释乱码检测与修复（维护工具，`--dry-run` 试运行） |
 
 ## 使用自定义数据源
 
@@ -235,6 +261,12 @@ config = CChanConfig({
 })
 ```
 
+## 变更日志
+
+版本变更记录见 [CHANGELOG.md](CHANGELOG.md)。
+
 ## 许可证
 
-MIT License
+[MIT License](LICENSE)
+
+三方数据源 `eltdx` 使用独立许可证，仅允许个人学习与非商业研究，商用需自行获得授权。
